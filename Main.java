@@ -29,13 +29,11 @@ public class Main{
                 switch (word[0].toLowerCase()) {
                     case ("add"):
                             Comands.add(productPriorityQueue);
-                            //Check.checkElement(productPriorityQueue);
                         break;
                     case ("info"):
                         Comands.info(productPriorityQueue);
                         break;
                     case ("show"):
-                        //Check.checkCollection(productPriorityQueue);
                         if (productPriorityQueue.size() > 0) {
                           Comands.show(productPriorityQueue);
                         } else {
@@ -100,8 +98,7 @@ public class Main{
                     case ("execute_script"):
                        try{
                            ForExecuteScript.executeScript(productPriorityQueue);
-                     } catch (NullPointerException e){
-                           System.out.println("lol");
+                     } catch (NullPointerException ignored){
                        }
                         break;
                     case ("update_id"):

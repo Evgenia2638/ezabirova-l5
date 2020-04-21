@@ -34,8 +34,6 @@ public class Coordinates {
                 throw new Exception();
             }
         } catch (Exception e) {
-            System.err.println("Вы ввели некоретное значение");
-            System.err.println("Максимальное значение -672.0");
             throw new Exception();
         }
     }
