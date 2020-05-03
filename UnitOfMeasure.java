@@ -1,8 +1,6 @@
-package Lab5;
-
-public enum UnitOfMeasure{
+public enum UnitOfMeasure {
     KILOGRAMS,
     METERS,
     CENTIMETERS,
-    LITERS,
+    LITERS;
 }

@@ -1,16 +1,24 @@
-package Lab5;
+import java.text.MessageFormat;
 
 public class Person {
-    private String name;
-    private Integer weight;
-    private Color eyeColor;
-    private Color hairColor;
-    private Country nationality;
+    private  final String name;
+    private  final float weight;
+    private  final Color eyeColor;
+    private  final Color hairColor;
+    private  final Country nationality;
+
+    public Person(String name, float weight, Color eyeColor, Color hairColor, Country nationality) {
+        this.name = name;
+        this.weight = weight;
+        this.eyeColor = eyeColor;
+        this.hairColor = hairColor;
+        this.nationality = nationality;
+    }
 
     public String getName() {
         return name;
     }
-    public Integer getWeight() {
+    public float getWeight() {
         return weight;
     }
     public Color getEyeColor() {
@@ -21,62 +29,6 @@ public class Person {
     }
     public Country getNationality() {
         return nationality;
-    }
-
-    public void setName(String name) {
-        try {
-            if ((name != null) && (!(name.equals("")))) {
-                this.name = name;
-            } else {
-                throw new Exception();
-            }
-        } catch (Exception e) {
-
-        }
-    }
-    public void setWeight(Integer weight) {
-        try {
-            if (weight >= 0) {
-                this.weight = weight;
-            } else {
-                throw new Exception();
-            }
-        } catch (Exception e) {
-
-        }
-    }
-    public void setEyeColor(Color eyeColor) {
-        try {
-            if (eyeColor != null) {
-                this.eyeColor = eyeColor;
-            } else {
-                throw new Exception();
-            }
-        } catch (Exception e) {
-
-        }
-    }
-    public void setHairColor(Color hairColor) {
-        try {
-            if (hairColor != null) {
-                this.hairColor = hairColor;
-            } else {
-                throw new Exception();
-            }
-        } catch (Exception e) {
-
-        }
-    }
-    public void setNationality(Country nationality) {
-        try {
-            if (nationality != null) {
-                this.nationality = nationality;
-            } else {
-                throw new Exception();
-            }
-        } catch (Exception e) {
-
-        }
     }
 
     @Override
@@ -109,8 +61,8 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person ( name: " + getName() +", weight: " + getWeight() +
-                ", eye color: " + getEyeColor() + ", hair color: " + getHairColor() + ", nationality: "
-                + getNationality();
+        String Template = "( name: {0}, weight: {1}, eye color: {2}, hair color: {3}, nationality {4})";
+        String StringWithParameters = MessageFormat.format( Template, getName(), getWeight(),getEyeColor(),getHairColor(),getNationality() );
+        return StringWithParameters;
     }
 }

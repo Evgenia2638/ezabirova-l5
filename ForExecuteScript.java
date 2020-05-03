@@ -1,11 +1,11 @@
-package Lab5;
-
 import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
-
 
 public class ForExecuteScript {
     static HashSet<File> WayToFiles = new HashSet<>();
+    private static Date initDate = new Date();
     public static void executeScript(PriorityQueue<Product> pq) throws IOException {
         System.out.println("Введите расположение вашего файла");
         Scanner sc = new Scanner(System.in);
@@ -24,37 +24,16 @@ public class ForExecuteScript {
                         ForExecuteScript.add(pq, file);
                         break;
                     case ("info"):
-                        Comands.info(pq);
+                        Commands.info(pq);
                         break;
                     case ("show"):
-                        if (pq.size() > 0) {
-                            Comands.show(pq);
-                        } else {
-                            System.out.println("Коллекция пуста");
-                        }
+                        Commands.show(pq);
                         break;
                     case ("remove_first"):
-                        Comands.removeFirst(pq);
-                        System.out.println("Объект удален");
+                        Commands.removeFirst(pq);
                         break;
                     case ("help"):
-                        System.out.println("Информация о доступных командах:" +
-                                "\ninfo: вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.)" +
-                                "\nadd : добавить новый элемент в коллекцию" +
-                                "\nshow: вывести в стандартный поток вывода все элементы коллекции в строковом представлении" +
-                                "\nclear: удалить из коллекции все элементы" +
-                                "\nremove_first: удалить первый элемент из коллекции" +
-                                "\nremove_by_id: удалить значение элемента по его id" +
-                                "\nupdate_id:  обновить значение элемента коллекции, id которого равен заданному" +
-                                "\nsave: сохранить коллекцию в файл" +
-                                "\nsave_and_exit: сохранить изменения и выйти из порграммы" +
-                                "\nfilter_greater_than_price: вывести элементы, значение поля price которых больше заданного" +
-                                "\ncount_less_than_price: вывести количество элементов, значение поля price которых меньше заданного" +
-                                "\ncount_greater_than_owner: вывести количество элементов, значение поля owner которых больше заданного" +
-                                "\nadd_if_max: добавить новый элемент в коллекцию, если его значение превышает значение наибольшего элемента этой коллекции" +
-                                "\nremove_greater: удалить из коллекции все элементы, превышающие заданный" +
-
-                                "\nexit: завершить работу программы");
+                        Commands.help();
                         break;
                     case ("remove_greater"):
                         ForExecuteScript.removeGreater(pq, file);
@@ -63,34 +42,329 @@ public class ForExecuteScript {
                         ForExecuteScript.addIfMax(pq, file);
                         break;
                     case ("filter_greater_than_price"):
-                        try {
                             ForExecuteScript.filterGreaterThanPrice(pq, file);
-                        } catch (NumberFormatException e) {
-                            System.err.println("Вы не ввели значение price, из-за этого сравнение невозможно");
+                        break;
+                    case ("clear"):
+                        Commands.takerCommands("clear", pq, file);
+                        break;
+                    case ("remove_by_id"):
+                        ForExecuteScript.removeById(pq, file);
+                        break;
+                    case ("update_id"):
+                        ForExecuteScript.updateId(pq, file);
+                        break;
+                    case ("exit"):
+                        exit = false;
+                        break;
+                    case ("execute_script"):
+                        File file1 = new File(reader.readLine());
+                        if (!WayToFiles.contains(file1)) {
+                            WayToFiles.add(file1);
+                            ForExecuteScript.executeScriptForFile(pq, file1);
+                        } else {
+                            WayToFiles.clear();
+                            System.err.println("Программа не может выполнить скрипт из указанного файла");
+                            System.err.println("Это может привести к зацыкливанию");
                         }
                         break;
-                    case ("count_less_than_price"):
+                }
+                line = reader.readLine();
+            }
+        } catch (NullPointerException ignored) {
+
+        } catch (FileNotFoundException e) {
+            System.err.println("Не получается найти ваш файл");
+            System.err.println("Проверьте правильность написания пути к файлу");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private static void add(PriorityQueue<Product> pq, File file) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
+        Date date = new Date();
+        try {
+            String line1 = reader.readLine();
+            String line = reader.readLine();
+            String delimeter = ", ";
+            if (line == null) {
+                System.out.println("Вы не ввели аргументы");
+            } else {
+                String[] subStr = line.split(delimeter);
+                if (Float.parseFloat(subStr[0]) <= -148) {
+                } else {
+                    if (Integer.parseInt(subStr[1]) <= -550) {
+                    } else {
+                        if (subStr[2] == null) {
+                        } else {
+                            if (Float.parseFloat(subStr[3]) <= 0) {
+                            } else {
+                                if (Long.parseLong(subStr[7]) <= 0) {
+                                } else {
+                                    Coordinates coordinates = new Coordinates(Float.parseFloat(subStr[0]), Integer.parseInt(subStr[1]));
+                                    Person person = new Person(subStr[2], Float.parseFloat(subStr[3]), Color.valueOf(subStr[4]), Color.valueOf(subStr[5]), Country.valueOf(subStr[6]));
+                                    Product product = new Product(coordinates.hashCode(), subStr[2], coordinates, date, Long.parseLong(subStr[7]), UnitOfMeasure.valueOf(subStr[8]), person);
+                                    System.out.println("Элемент успешно добавлен");
+                                    pq.add(product);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (NumberFormatException ignored) {
+            System.out.println("Элемент не добавлен");
+            System.out.println("Вы ввели некорректные данные");
+            System.out.println("Попробуйте добавить элемент еще раз");
+        }
+    }
+    private static void addIfMax(PriorityQueue<Product> pq, File file) throws Exception {
+        int parametr = 0;
+        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
+        Date date = new Date();
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        try {
+            String line1 = reader.readLine();
+            String line = reader.readLine();
+            String delimeter = ", ";
+            if (line == null) {
+                System.out.println("Вы не ввели аргументы");
+            } else {
+                String[] subStr = line.split(delimeter);
+                Object[] products = pq.toArray();
+                for (Object o : products) {
+                    Product product = (Product) o;
+                    if (product.getCoordinates().getX() <= Float.parseFloat(subStr[0])) {
+                        if (product.getCoordinates().getX() <= Integer.parseInt(subStr[1])) {
+                            if (subStr[2] != null) {
+                                if (product.getOwner().getWeight() <= Float.parseFloat(subStr[3])) {
+                                    if (product.getPrice() <= (Long.parseLong(subStr[7]))) {
+                                        parametr++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (line != null) {
+                String[] subStr = line.split(delimeter);
+                if (parametr == pq.size()) {
+                    Coordinates coordinates1 = new Coordinates(Float.parseFloat(subStr[0]), Integer.parseInt(subStr[1]));
+                    Person person1 = new Person(subStr[2], Float.parseFloat(subStr[3]), Color.valueOf(subStr[4]), Color.valueOf(subStr[5]), Country.valueOf(subStr[6]));
+                    Product product1 = new Product(coordinates1.hashCode(), subStr[2], coordinates1, date, Long.parseLong(subStr[7]), UnitOfMeasure.valueOf(subStr[8]), person1);
+                    System.out.println("Элемент успешно добавлен");
+                    pq.add(product1);
+                } else {
+                    System.out.println("Элемент не добавлен");
+                    System.out.println("Элемент не превышает все элементы коллекции");
+                }
+            }
+        } catch (NumberFormatException ignored) {
+            System.out.println("Элемент не добавлен");
+            System.out.println("Вы ввели некорректные данные");
+            System.out.println("Попробуйте добавить элемент еще раз");
+        }
+    }
+    private static void filterGreaterThanPrice(PriorityQueue<Product> pq, File file) throws IOException {
+        boolean flag = false;
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String line1 = reader.readLine();
+        String line = reader.readLine();
+        float price = Float.parseFloat(line);
+        Object[] products = pq.toArray();
+        for (Object o : products) {
+            Product product = (Product) o;
+            if (product.getPrice() > price) {
+                System.out.println(product);
+                flag = true;
+            }
+        }
+        if (!flag) {
+            System.out.println("В коллекци нет таких элментов, чтобы значение price было больше чем " + price);
+        }
+    }
+    private static void removeGreater(PriorityQueue<Product> pq, File file) throws IOException {
+        boolean flag = false;
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        try {
+            String line1 = reader.readLine();
+            String line = reader.readLine();
+            String delimeter = ", ";
+            if (line == null) {
+                System.out.println("Вы не ввели аргументы");
+            } else {
+                String[] subStr = line.split(delimeter);
+                Object[] products = pq.toArray();
+                for (Object o : products) {
+                    Product product = (Product) o;
+                    if (product.getCoordinates().getX() < Float.parseFloat(subStr[0])) {
+                        if (product.getCoordinates().getX() <= Integer.parseInt(subStr[1])) {
+                            if (product.getOwner().getWeight() <= Float.parseFloat(subStr[2])) {
+                                if (product.getPrice() <= (Long.parseLong(subStr[3]))) {
+                                    pq.remove(o);
+                                    flag = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (flag) {
+                System.out.println("Элементы успешно удалены");
+            } else {
+                System.out.println("В коллекции нет элементов, которые бы превышали заданный");
+            }
+        } catch (NumberFormatException ignored) {
+            System.err.println("Вы ввели некорректные данные");
+            System.out.println("Попробуйте добавить элемент еще раз");
+        }
+    }
+    private static void removeById(PriorityQueue<Product> priorityQueue, File file) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        Object[] products = priorityQueue.toArray();
+        int sizeProduct = priorityQueue.size();
+        String line = reader.readLine();
+        String id = reader.readLine();
+        if (id == null) {
+            System.err.println("Значение id не может быть пустым");
+        } else {
+            int id2 = Integer.parseInt(id);
+            for (Object o : products) {
+                Product product = (Product) o;
+                if (id2 == product.getId()) {
+                    priorityQueue.remove(o);
+                    System.out.println("Элемент успешно удален");
+                }
+            }
+            if (priorityQueue.size() == sizeProduct) {
+                System.out.println("Элемент не удален");
+                System.out.println("К сожалению, элемента с таким id  в коллекции нет");
+            }
+        }
+    }
+    private static void updateId(PriorityQueue<Product> priorityQueue, File file) throws IOException {
+        boolean flag = false;
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        Object[] products = priorityQueue.toArray();
+        Date date = new Date();
+        int sizeProduct = priorityQueue.size();
+        System.out.println("Введите id элемента, чтобы обновить его");
+        String line1 = reader.readLine();
+        String id = reader.readLine();
+        String delimeter = ", ";
+        if (id == null) {
+            System.err.println("Значение id не может быть пустым");
+        } else {
+            int id2 = Integer.parseInt(id);
+            for (Object o : products) {
+                Product product = (Product) o;
+                if (id2 == product.getId()) {
+                    priorityQueue.remove(o);
+                    flag = true;
+                    String line = reader.readLine();
+                    try {
+                        if (line == null) {
+                            System.out.println("Вы не ввели аргументы");
+                        } else {
+                            String[] subStr = line.split(delimeter);
+                            if (Float.parseFloat(subStr[0]) <= -148) {
+                                System.err.println("Значение х должно быть больше -148");
+                                System.out.println("Элемент не добавлен");
+                            } else {
+                                if (Integer.parseInt(subStr[1]) <= -550) {
+                                    System.err.println("Значение у должно быть больше -550");
+                                    System.out.println("Элемент не добавлен");
+                                } else {
+                                    if (subStr[2] == null) {
+                                        System.err.println("Имя не может быть путым");
+                                        System.out.println("Элемент не добавлен");
+                                    } else {
+                                        if (Float.parseFloat(subStr[3]) <= 0) {
+                                            System.err.println("Вес должен быть больше 0");
+                                            System.out.println("Элемент не добавлен");
+                                        } else {
+                                            if (Long.parseLong(subStr[7]) <= 0) {
+                                                System.err.println("Цена должена быть больше 0");
+                                                System.out.println("Элемент не добавлен");
+                                            } else {
+                                                Coordinates coordinates = new Coordinates(Float.parseFloat(subStr[0]), Integer.parseInt(subStr[1]));
+                                                Person person = new Person(subStr[2], Float.parseFloat(subStr[3]), Color.valueOf(subStr[4]), Color.valueOf(subStr[5]), Country.valueOf(subStr[6]));
+                                                Product product2 = new Product(id2, subStr[2], coordinates, date, Long.parseLong(subStr[7]), UnitOfMeasure.valueOf(subStr[8]), person);
+                                                System.out.println("Элемент успешно обновлен");
+                                                priorityQueue.add(product2);
+                                            }
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } catch (NumberFormatException ignored) {
+                        System.out.println("Элемент не обновлен");
+                        System.out.println("Вы ввели некорректные данные");
+                        System.out.println("Попробуйте добавить элемент еще раз");
+                    }
+                }
+            }
+        }
+        if (!flag) {
+            System.err.println("Элемент не может быть обновлен");
+            System.out.println("В коллекции нет элемента с таким id");
+        }
+    }
+    public static void executeScriptForFile(PriorityQueue<Product> pq, File file1) throws IOException {
+        FileReader fr1 = new FileReader(file1);
+        BufferedReader reader1 = new BufferedReader(fr1);
+        try {
+            FileReader fr = new FileReader(file1);
+            Object[] products = pq.toArray();
+            boolean exit = true;
+            while (exit) {
+                BufferedReader reader = new BufferedReader(fr);
+                String line = reader.readLine();
+                switch (line.toLowerCase()) {
+                    case ("add"):
+                        ForExecuteScript.add(pq, file1);
+                        break;
+                    case ("info"):
+                        Commands.info(pq);
+                        break;
+                    case ("show"):
+                            Commands.show(pq);
+                        break;
+                    case ("remove_first"):
+                        Commands.removeFirst(pq);
+                        break;
+                    case ("help"):
+                       Commands.help();
+                        break;
+                    case ("remove_greater"):
+                        ForExecuteScript.removeGreater(pq, file1);
+                        break;
+                    case ("add_if_max"):
+                        ForExecuteScript.addIfMax(pq, file1);
+                        break;
+                    case ("filter_greater_than_price"):
                         try {
-                            ForExecuteScript.countLessThanPrice(pq, file);
+                            ForExecuteScript.filterGreaterThanPrice(pq, file1);
                         } catch (NumberFormatException e) {
                             System.err.println("Вы не ввели значение price, из-за этого сравнение невозможно");
                         }
                         break;
                     case ("clear"):
-                        Comands.clear(pq);
-                        System.out.println("Все элементы успешно удалены");
-
+                        Commands.clear(pq);
                         break;
                     case ("remove_by_id"):
                         try {
-                            Comands.removeById(pq);
+                            ForExecuteScript.removeById(pq, file1);
                         } catch (Exception e) {
                             System.out.println("Что-то пошло не так и элемент не обновлен");
                         }
                         break;
                     case ("update_id"):
                         try {
-                            Comands.updateId(pq);
+                            ForExecuteScript.updateId(pq, file1);
                         } catch (Exception e) {
                             System.out.println("Что-то пошло не так и элемент не обновлен");
                         }
@@ -99,7 +373,6 @@ public class ForExecuteScript {
                         exit = false;
                         break;
                     case ("execute_script"):
-                        File file1 = new File(reader.readLine());
                         if(!WayToFiles.contains(file1)) {
                             WayToFiles.add(file1);
                             ForExecuteScript.executeScriptForFile(pq,file1);
@@ -121,394 +394,4 @@ public class ForExecuteScript {
             e.printStackTrace();
         }
     }
-
-    public static void add(PriorityQueue<Product> pq, File file) throws IOException {
-        FileReader fr = new FileReader(String.valueOf(file));
-        Object[] products = pq.toArray();
-        Product product = new Product();
-        Coordinates coordinates = new Coordinates();
-        Person person = new Person();
-        BufferedReader reader = new BufferedReader(fr);
-        String line = reader.readLine();
-        try {
-            String name = reader.readLine();
-            if (name== null){
-                System.err.println("Имя не может быть null");
-                return;
-            }else {
-                product.setName(name);
-                person.setName(name);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        try {
-            String X = reader.readLine();
-            if (X== null){
-                System.err.println("X не может быть null");
-                return;
-            }else {
-                coordinates.setX(Double.parseDouble(X));
-            }
-        } catch (NumberFormatException ignored) {
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        try {
-            String Y = reader.readLine();
-            if (Y == null){
-                System.err.println("Y не может быть null");
-                return;
-            }else {
-                coordinates.setY(Long.parseLong(Y));
-                product.setCoordinates(coordinates);
-            }
-        } catch (NullPointerException | NumberFormatException ignored) {
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        try {
-            String Weight = reader.readLine();
-            if (Weight == null){
-                System.err.println("Вес не может быть пull");
-                return;
-            }else {
-                person.setWeight((int) Double.parseDouble(Weight));
-            }
-        } catch (NullPointerException | NumberFormatException ignored) {
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        try {
-            String Price = reader.readLine();
-            if (Price == null){
-                System.err.println("Цена не может быть null");
-                return;
-            }else {
-                product.setPrice(Float.parseFloat(Price));
-            }
-        } catch (NullPointerException | NumberFormatException ignored) {
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        try {
-            person.setEyeColor(Color.valueOf(reader.readLine()));
-        } catch (NullPointerException | IllegalArgumentException ignored) {
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        try {
-            person.setHairColor(Color.valueOf(reader.readLine()));
-        } catch (NullPointerException | IllegalArgumentException ignored) {
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        try {
-            person.setNationality(Country.valueOf(reader.readLine()));
-            product.setOwner(person);
-        } catch (NullPointerException | IllegalArgumentException ignored) {
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        try {
-            product.setUnitOfMeasure(UnitOfMeasure.valueOf(reader.readLine()));
-        } catch (NullPointerException | IllegalArgumentException ignored) {
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        product.setCreationDate(new Date());
-        long[] id = new long[1];
-        product.setId((long) id.hashCode());
-        int h = 0;
-        pq.add(product);
-        System.out.println("Ваш элемент успешно добавлен");
-    }
-
-    public static void addIfMax(PriorityQueue<Product> pq, File file) throws Exception {
-        int h = 0;
-        FileReader fr = new FileReader(String.valueOf(file));
-        Object[] products = pq.toArray();
-        BufferedReader reader = new BufferedReader(fr);
-        String line = reader.readLine();
-        float price2 = 0;
-        for (Object o : products) {
-            Product product = (Product) o;
-            if (product.getPrice() > price2) {
-                price2 = product.getPrice();
-            }
-        }
-        String str2 = reader.readLine();
-        float price1 = Float.parseFloat(str2);
-        Product product = new Product();
-        Coordinates coordinates = new Coordinates();
-        Person person = new Person();
-        try {
-            String name = reader.readLine();
-            if (name == null){
-                System.err.println("Имя не может быть null");
-                return;
-            }else {
-                product.setName(name);
-                person.setName(name);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        try {
-            String X = reader.readLine();
-            if (X== null){
-                System.err.println("X не может быть null");
-                return;
-            }else {
-                coordinates.setX(Double.parseDouble(X));
-            }
-        } catch (NullPointerException | NumberFormatException ignored) {
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        try {
-            String Y = reader.readLine();
-            if (Y== null){
-                System.err.println("Y не может быть null");
-                return;
-            }else {
-                coordinates.setY((long) Double.parseDouble(Y));
-                product.setCoordinates(coordinates);
-            }
-        } catch (NullPointerException | NumberFormatException ignored) {
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        try {
-            String Weight = reader.readLine();
-            if (Weight== null){
-                System.err.println("Вес не может быть null");
-                return;
-            }else {
-                person.setWeight((int) Double.parseDouble(Weight));
-            }
-        } catch (NullPointerException | NumberFormatException ignored) {
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        try {
-            person.setEyeColor(Color.valueOf(reader.readLine()));
-        } catch (NullPointerException | NumberFormatException ignored) {
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        try {
-            person.setHairColor(Color.valueOf(reader.readLine()));
-        } catch (NullPointerException | NumberFormatException ignored) {
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        try {
-            person.setNationality(Country.valueOf(reader.readLine()));
-            product.setOwner(person);
-        } catch (NullPointerException | NumberFormatException ignored) {
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        try {
-            product.setUnitOfMeasure(UnitOfMeasure.valueOf(reader.readLine()));
-        } catch (NullPointerException | NumberFormatException ignored) {
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        product.setPrice(price1);
-        product.setCreationDate(new Date());
-        long[] id = new long[1];
-        product.setId((long) Arrays.hashCode(id));
-        if (price1 > price2) {
-            pq.add(product);
-            System.out.println("Ваш элемент успешно добавлен");
-        } else {
-            System.out.println("Ваш элемент не добавлен");
-            System.out.println("Значение вашего элемента не превышает значение наибольшего значения из этой коллекции");
-        }
-
-    }
-
-    public static void countLessThanPrice(PriorityQueue<Product> pq, File file) throws IOException {
-        int h = 0;
-        FileReader fr = new FileReader(String.valueOf(file));
-        BufferedReader reader = new BufferedReader(fr);
-        String str1 = reader.readLine();
-        float price2 = Float.parseFloat(str1);
-        Object[] products = pq.toArray();
-        for (Object o : products) {
-            Product product = (Product) o;
-            if (product.getPrice() < price2) {
-                System.out.println(o);
-                h++;
-            }
-        }
-        if (h == 0) {
-            System.out.println("В коллекци нет таких элментов, чтобы значение price было меньше чем " + price2);
-        }
-    }
-
-    public static void filterGreaterThanPrice(PriorityQueue<Product> pq, File file) throws IOException {
-        int h = 0;
-        FileReader fr = new FileReader(String.valueOf(file));
-        BufferedReader reader = new BufferedReader(fr);
-        String str1 = reader.readLine();
-        float price2 = Float.parseFloat(str1);
-        Object[] products = pq.toArray();
-        System.out.println("В коллекци нет таких элментов, чтобы значение price было больше чем " + price2);
-    }
-
-    public static void removeGreater(PriorityQueue<Product> pq, File file) throws IOException {
-        int h = 0;
-        FileReader fr = new FileReader(String.valueOf(file));
-        BufferedReader reader = new BufferedReader(fr);
-        String X1 = reader.readLine();
-        String Y1 = reader.readLine();
-        String str1 = reader.readLine();
-        float price2 = Float.parseFloat(str1);
-        Object[] products = pq.toArray();
-        for (Object o : products) {
-            Product product = (Product) o;
-            if (product.getPrice() < price2) {
-                pq.remove(product);
-                h++;
-            }
-        }
-        if (h < pq.size()) {
-            System.out.println("Все элементы больше заданных величин");
-        } else {
-            System.out.println("Успешно удалено " + h + " элемента/ов");
-        }
-    }
-
-    public static void executeScriptForFile(PriorityQueue<Product> pq, File file1) throws IOException {
-        FileReader fr1 = new FileReader(file1);
-        BufferedReader reader1 = new BufferedReader(fr1);
-        try {
-            FileReader fr = new FileReader(file1);
-            Object[] products = pq.toArray();
-            boolean exit = true;
-            while (exit) {
-                BufferedReader reader = new BufferedReader(fr);
-                String line = reader.readLine();
-                switch (line.toLowerCase()) {
-                    case ("add"):
-                        ForExecuteScript.add(pq, file1);
-                      //  Check.checkElement(pq);
-                        break;
-                    case ("info"):
-                        Comands.info(pq);
-                        break;
-                    case ("show"):
-                        if (pq.size() > 0) {
-                            Comands.show(pq);
-                        } else {
-                            System.out.println("Коллекция пуста");
-                        }
-                        break;
-                    case ("remove_first"):
-                        Comands.removeFirst(pq);
-                        System.out.println("Объект удален");
-                        break;
-                    case ("help"):
-                        System.out.println("Информация о доступных командах:" +
-                                "\ninfo: вывести в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.)" +
-                                "\nadd : добавить новый элемент в коллекцию" +
-                                "\nshow: вывести в стандартный поток вывода все элементы коллекции в строковом представлении" +
-                                "\nclear: удалить из коллекции все элементы" +
-                                "\nremove_first: удалить первый элемент из коллекции" +
-                                "\nremove_by_id: удалить значение элемента по его id" +
-                                "\nupdate_id:  обновить значение элемента коллекции, id которого равен заданному" +
-                                "\nsave: сохранить коллекцию в файл" +
-                                "\nsave_and_exit: сохранить изменения и выйти из порграммы" +
-                                "\nfilter_greater_than_price: вывести элементы, значение поля price которых больше заданного" +
-                                "\ncount_less_than_price: вывести количество элементов, значение поля price которых меньше заданного" +
-                                "\ncount_greater_than_owner: вывести количество элементов, значение поля owner которых больше заданного" +
-                                "\nadd_if_max: добавить новый элемент в коллекцию, если его значение превышает значение наибольшего элемента этой коллекции" +
-                                "\nremove_greater: удалить из коллекции все элементы, превышающие заданный" +
-
-                                "\nexit: завершить работу программы");
-                        break;
-                    case ("remove_greater"):
-                        ForExecuteScript.removeGreater(pq, file1);
-                        break;
-                    case ("add_if_max"):
-                        ForExecuteScript.addIfMax(pq, file1);
-                        break;
-                    case ("filter_greater_than_price"):
-                        try {
-                            ForExecuteScript.filterGreaterThanPrice(pq, file1);
-                        } catch (NumberFormatException e) {
-                            System.err.println("Вы не ввели значение price, из-за этого сравнение невозможно");
-                        }
-                        break;
-                    case ("count_less_than_price"):
-                        try {
-                            ForExecuteScript.countLessThanPrice(pq, file1);
-                        } catch (NumberFormatException e) {
-                            System.err.println("Вы не ввели значение price, из-за этого сравнение невозможно");
-                        }
-                        break;
-                    case ("clear"):
-                        Comands.clear(pq);
-                        System.out.println("Все элементы успешно удалены");
-
-                        break;
-                    case ("remove_by_id"):
-                        try {
-                            Comands.removeById(pq);
-                        } catch (Exception e) {
-                            System.out.println("Что-то пошло не так и элемент не обновлен");
-                        }
-                        break;
-                    case ("update_id"):
-                        try {
-                            Comands.updateId(pq);
-                        } catch (Exception e) {
-                            System.out.println("Что-то пошло не так и элемент не обновлен");
-                        }
-                        break;
-                    case ("exit"):
-                        exit = false;
-                        break;
-                    case ("execute_script"):
-                        if(!WayToFiles.contains(file1)) {
-                            WayToFiles.add(file1);
-                           ForExecuteScript.executeScriptForFile(pq,file1);
-                        }else {
-                            WayToFiles.clear();
-                            System.err.println("Программа не может выполнить скрипт из указанного файла");
-                            System.err.println("Это может привести к зацыкливанию");
-                        }
-                        break;
-                }
-                line = reader.readLine();
-            }
-        } catch (NullPointerException ignored) {
-
-        } catch (FileNotFoundException e) {
-            System.err.println("Не получается найти ваш файл");
-            System.err.println("Проверьте правильность написания пути к файлу");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 }

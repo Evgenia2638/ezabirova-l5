@@ -1,10 +1,7 @@
-package Lab5;
-
-public enum Color{
+public enum Color {
     RED,
     BLACK,
     BLUE,
     YELLOW,
-    WHITE,
-    ORANGE,
+    ORANGE;
 }

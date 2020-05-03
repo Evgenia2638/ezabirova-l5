@@ -1,8 +1,6 @@
-package Lab5;
-
-public enum Country{
+public enum Country {
     RUSSIA,
     SPAIN,
     VATICAN,
-    ITALY,
+    ITALY;
 }

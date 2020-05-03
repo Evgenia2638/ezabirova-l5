@@ -1,10 +1,8 @@
-package Lab5;
 
 import java.util.Comparator;
 
 public class ComparatorR implements Comparator<Product> {
     /**
-     *
      * @param c1
      * @param c2
      * @return
