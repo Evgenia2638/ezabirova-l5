@@ -23,9 +23,9 @@ public class Server {
         System.out.println("Connection from " + socket + "!");
         DC.bind(socket);
         try {
-            File file = new File("D:\\Рабочий стол\\testcsv.csv");
-           // String path = args[0];
-           // File file = new File(path);
+            //File file = new File("D:\\Рабочий стол\\testcsv.csv");
+            String path = args[0];
+            File file = new File(path);
             PriorityQueue<Product> productPriorityQueue = MakerCollection.CSVtoCollection(file);
             boolean isExit = false;
             while (!isExit) {
